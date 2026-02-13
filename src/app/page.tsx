@@ -5,13 +5,17 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const supabase = await getSupabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const supabase = await getSupabaseServer();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  // Already logged in? Skip straight to the dashboard.
-  if (user) redirect("/dashboard");
+    // Already logged in? Skip straight to the dashboard.
+    if (user) redirect("/dashboard");
+  } catch {
+    // If auth check fails, just show the landing page
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 px-4 text-center">
